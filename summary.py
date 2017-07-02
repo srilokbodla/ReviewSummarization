@@ -57,25 +57,33 @@ for i in range(len(ngrams)):
 # filtering extracted keywords
 #print keywords
 a = []
+duplicateKeys=[]
 for i in range(len(keywords)):
     a.append(nltk.pos_tag(nltk.word_tokenize(keywords[i])))
     if len(set([a[i][0][1], a[i][1][1]]).intersection(['PRP', 'IN', 'DT', 'FW', 'LS', 'MD', 'POS', 'SYM', 'TO', 'CD', 'CC', 'UH'])):
-        del keywords[i]
+        duplicateKeys.append(keywords[i])
 
+keyList=[x for x in keywords if x not in duplicateKeys]
 key1 = []
 key2 = []
 key3 = []
 
 # making list of reviews containing keywords (for each keyword separate list)
-
+dictionary={}
 for line in range(len(useful_words)):
-    if useful_words[line].find(keywords[0]) != -1:
+    if useful_words[line].find(keyList[0]) != -1:
         key1.append(data_file[line]['reviewText'])
-    elif useful_words[line].find(keywords[1]) != -1:
+        #dictionary.update({data_file[line]['reviewerID'] , data_file[line]['reviewText']})
+        dictionary[data_file[line]['reviewerID']]=data_file[line]['reviewText']
+    if useful_words[line].find(keyList[1]) != -1:
         key2.append(data_file[line]['reviewText'])
-    elif useful_words[line].find(keywords[7]) != -1:
+        dictionary[data_file[line]['reviewerID']] = data_file[line]['reviewText']
+    if useful_words[line].find(keyList[7]) != -1:
         key3.append(data_file[line]['reviewText'])
+        dictionary[data_file[line]['reviewerID']] = data_file[line]['reviewText']
 
 print len(key1)
 print len(key2)
 print len(key3)
+
+
